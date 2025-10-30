@@ -1,0 +1,146 @@
+/* Footer.css */
+.gate6-footer {
+  background-color: #1a1a1a;
+  color: #fff;
+  padding: 50px 0 20px;
+  font-size: 14px;
+}
+
+.footer-title {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #fff;
+}
+
+.social-links {
+  display: flex;
+  gap: 15px;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: #333;
+  border-radius: 50%;
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.social-link:hover {
+  background-color: #eac15a;
+  color: #000;
+}
+
+.newsletter-form .form-control {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  color: #fff;
+  border-radius: 4px 0 0 4px;
+}
+
+.newsletter-form .form-control:focus {
+  box-shadow: none;
+  border-color: #eac15a;
+}
+
+.newsletter-form .btn {
+  border-radius: 0 4px 4px 0;
+  background-color: #eac15a;
+  color: #000;
+  border: 1px solid #eac15a;
+}
+
+.newsletter-form .btn:hover {
+  background-color: #d9b24f;
+}
+
+.contact-info p {
+  margin-bottom: 10px;
+  color: #ccc;
+}
+
+.contact-info i {
+  color: #eac15a;
+  width: 20px;
+}
+
+.payment-methods, .certificates {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.payment-methods img, .certificates img {
+  height: 30px;
+  background: #fff;
+  padding: 3px;
+  border-radius: 4px;
+}
+
+.footer-divider {
+  border-color: #444;
+  margin: 30px 0 20px;
+}
+
+.footer-bottom {
+  color: #999;
+}
+
+.footer-bottom p {
+  margin-bottom: 5px;
+}
+
+.company-info {
+  font-weight: 500;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .gate6-footer {
+    padding: 30px 0 20px;
+  }
+  
+  .footer-title {
+    margin-bottom: 15px;
+  }
+  
+  .social-links {
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .payment-methods, .certificates {
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .footer-bottom .text-md-end {
+    text-align: left !important;
+  }
+}
