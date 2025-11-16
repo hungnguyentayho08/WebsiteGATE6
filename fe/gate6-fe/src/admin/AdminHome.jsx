@@ -87,7 +87,7 @@ const AdminHome = () => {
 
     return (
         <div className="container-fluid px-4 py-3">
-            <ComingSoonNotice />
+            <ComingSoonNotice /> {/* Thông báo tính năng sắp ra mắt */}
             <div className="d-flex  align-items-center mb-4">
                 <Link to="/admin/dashboard" className="btn btn-outline-secondary me-2">
                     <i className="bi bi-arrow-left-circle me-1"></i>

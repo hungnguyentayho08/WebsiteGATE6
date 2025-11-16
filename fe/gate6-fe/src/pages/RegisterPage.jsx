@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
@@ -23,28 +22,27 @@ export default function RegisterPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (formData.password !== formData.confirmPassword) {
             setMessage("❌ Mật khẩu nhập lại không khớp!");
             return;
         }
 
         try {
-            const response = await axios.post("http://localhost:8080/api/users/register", {
-                username: formData.username,
-                email: formData.email,
-                password: formData.password,
-                fullname: formData.fullname,
-                phone: formData.phone,
-                address: formData.address,
-                role: "USER"
-            });
+            const response = await axios.post(
+                "http://localhost:8080/api/users/register",
+                {
+                    username: formData.username.trim(),
+                    email: formData.email.trim(),
+                    password: formData.password.trim(),
+                    fullname: formData.fullname.trim(),
+                    phone: formData.phone.trim(),
+                    address: formData.address.trim()
+                },
+                { headers: { "Content-Type": "application/json" } }
+            );
 
             setMessage("✅ Đăng ký thành công! Chuyển sang trang đăng nhập...");
-
-            setTimeout(() => {
-                navigate("/login");
-            }, 2000);
+            setTimeout(() => navigate("/login"), 2000);
 
         } catch (error) {
             if (error.response && error.response.data) {
@@ -64,96 +62,35 @@ export default function RegisterPage() {
                         {message && <p className="text-center">{message}</p>}
                         <Form onSubmit={handleSubmit}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Tên người dùng</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="username"
-                                    placeholder="Nhập tên người dùng"
-                                    value={formData.username}
-                                    onChange={handleChange}
-                                    required
-                                />
+                                <Form.Label>Tên hiển thị</Form.Label>
+                                <Form.Control type="text" name="username" value={formData.username} onChange={handleChange} required />
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Email</Form.Label>
-                                <Form.Control
-                                    type="email"
-                                    name="email"
-                                    placeholder="Nhập email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    required
-                                />
+                                <Form.Control type="email" name="email" value={formData.email} onChange={handleChange} required />
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <Form.Label>Họ và tên</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="fullname"
-                                    placeholder="Nhập họ và tên"
-                                    value={formData.fullname}
-                                    onChange={handleChange}
-                                    required
-                                />
+                                <Form.Label>Họ tên đầy đủ</Form.Label>
+                                <Form.Control type="text" name="fullname" value={formData.fullname} onChange={handleChange} required />
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Số điện thoại</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="phone"
-                                    placeholder="Nhập số điện thoại"
-                                    value={formData.phone}
-                                    onChange={handleChange}
-                                    required
-                                />
+                                <Form.Control type="text" name="phone" value={formData.phone} onChange={handleChange} required />
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Địa chỉ</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="address"
-                                    placeholder="Nhập địa chỉ"
-                                    value={formData.address}
-                                    onChange={handleChange}
-                                    required
-                                />
+                                <Form.Control type="text" name="address" value={formData.address} onChange={handleChange} required />
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Mật khẩu</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    name="password"
-                                    placeholder="Nhập mật khẩu"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    required
-                                />
+                                <Form.Control type="password" name="password" value={formData.password} onChange={handleChange} required />
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <Form.Label>Nhập lại mật khẩu</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    name="confirmPassword"
-                                    placeholder="Nhập lại mật khẩu"
-                                    value={formData.confirmPassword}
-                                    onChange={handleChange}
-                                    required
-                                />
+                                <Form.Label>Xác nhận mật khẩu</Form.Label>
+                                <Form.Control type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
                             </Form.Group>
-                            <Button variant="dark" type="submit" className="w-100">
-                                Đăng ký
-                            </Button>
+                            <Button variant="dark" type="submit" className="w-100">Đăng ký</Button>
                         </Form>
-                        <p className="text-center mt-3">
-                            Đã có tài khoản?{" "}
-                            <Button
-                                variant="link"
-                                onClick={() => navigate("/login")}
-                                className="p-0"
-                            >
-                                Đăng nhập
-                            </Button>
-                        </p>
                     </Card>
                 </Col>
             </Row>

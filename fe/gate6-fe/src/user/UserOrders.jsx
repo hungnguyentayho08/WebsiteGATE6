@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import OrderRow from "./OrderRow";
 import axios from "axios";
-import { AuthContext } from "../context/AuthContext"; // giả sử bạn lưu user login ở đây
+import { AuthContext } from "../context/AuthContext";
 
 const UserOrders = () => {
     const { user } = useContext(AuthContext); // user.id dùng để fetch đơn hàng

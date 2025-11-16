@@ -1,4 +1,3 @@
-// src/pages/LoginPage.jsx
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Container, Form, Button, Card } from "react-bootstrap";
@@ -12,34 +11,30 @@ export default function LoginPage() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-
         if (!username || !password) {
             setMessage("❌ Vui lòng nhập đầy đủ thông tin!");
             return;
         }
 
         try {
-            const response = await axios.post("http://localhost:8080/api/users/login", {
-                username,
-                password
-            });
+            const response = await axios.post(
+                "http://localhost:8080/api/users/login",
+                {
+                    username: username.trim(),
+                    password: password.trim()
+                },
+                { headers: { "Content-Type": "application/json" } }
+            );
 
             const userData = response.data;
-
-            // ✅ Lưu user vào localStorage
             localStorage.setItem("user", JSON.stringify(userData));
 
-            // ✅ Phân quyền theo role
             if (userData.role === "ADMIN") {
-                setMessage("✅ Đăng nhập Admin thành công! Chuyển tới trang quản lý...");
-                setTimeout(() => {
-                    navigate("/admin/dashboard"); // 👉 Trang admin
-                }, 1000);
+                setMessage("✅ Đăng nhập Admin thành công!");
+                setTimeout(() => navigate("/admin/dashboard"), 1000);
             } else {
-                setMessage("✅ Đăng nhập thành công! Chuyển tới trang cá nhân...");
-                setTimeout(() => {
-                    navigate("/user/dashboard"); // 👉 Trang user
-                }, 1000);
+                setMessage("✅ Đăng nhập thành công!");
+                setTimeout(() => navigate("/user/dashboard"), 1000);
             }
 
         } catch (error) {
@@ -57,33 +52,16 @@ export default function LoginPage() {
                 <h3 className="text-center mb-3">Đăng nhập</h3>
                 {message && <p className="text-center">{message}</p>}
                 <Form onSubmit={handleLogin}>
-                    <Form.Group className="mb-3" controlId="formUsername">
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Nhập username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                        />
+                    <Form.Group className="mb-3">
+                        <Form.Label>Tên người dùng</Form.Label>
+                        <Form.Control type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
                     </Form.Group>
-
-                    <Form.Group className="mb-3" controlId="formPassword">
+                    <Form.Group className="mb-3">
                         <Form.Label>Mật khẩu</Form.Label>
-                        <Form.Control
-                            type="password"
-                            placeholder="Nhập mật khẩu"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
+                        <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                     </Form.Group>
-
-                    <Button variant="dark" type="submit" className="w-100">
-                        Đăng nhập
-                    </Button>
+                    <Button variant="dark" type="submit" className="w-100">Đăng nhập</Button>
                 </Form>
-
                 <div className="text-center mt-3">
                     <span>Bạn chưa có tài khoản? </span>
                     <Link to="/register">Đăng ký ngay</Link>

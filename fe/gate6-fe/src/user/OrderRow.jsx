@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const OrderRow = ({ order, onCancel }) => {
-    // Format ngày
     const formatDate = (dateStr) => {
         if (!dateStr) return "";
         const date = new Date(dateStr);
@@ -16,7 +15,6 @@ const OrderRow = ({ order, onCancel }) => {
         });
     };
 
-    // Format trạng thái
     const renderStatus = (status) => {
         switch (status) {
             case "PENDING":
@@ -30,18 +28,24 @@ const OrderRow = ({ order, onCancel }) => {
         }
     };
 
-    // Gọi API hủy đơn hàng
     const handleCancel = async () => {
         if (!window.confirm("Bạn có chắc chắn muốn hủy đơn hàng này?")) return;
+
         try {
-            await axios.put(`http://localhost:8080/api/orders/${order.id}/cancel`, null, {
-                params: { userId: order.userId } // cần gửi userId
-            });
-            if (onCancel) onCancel(order.id); // callback để FE cập nhật trạng thái
-            alert("✅ Đơn hàng đã được hủy!");
+            const response = await axios.put(
+                `http://localhost:8080/api/orders/${order.id}/cancel`,
+                { userId: order.userId } // gửi userId trong body JSON
+            );
+
+            if (response.status === 200) {
+                alert("✅ Đơn hàng đã được hủy!");
+                if (onCancel) onCancel(order.id);
+            } else {
+                alert("❌ Hủy đơn hàng thất bại!");
+            }
         } catch (err) {
+            console.error("❌ Lỗi khi hủy đơn hàng:", err);
             alert("❌ Hủy đơn hàng thất bại!");
-            console.error(err);
         }
     };
 

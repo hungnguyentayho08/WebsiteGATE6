@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.gate6be.model.User;
 import com.example.gate6be.service.UserService;
+import com.example.gate6be.dto.UserRegisterRequest;
 import com.example.gate6be.dto.UserRequest;
 
 @RestController
@@ -22,49 +23,36 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // Đăng ký 
     @PostMapping("/register")
-    public ResponseEntity<UserRequest> register(@RequestBody User user) {
+    public ResponseEntity<?> register(@RequestBody UserRegisterRequest request) {
         try {
-            user.setPassword(passwordEncoder.encode(user.getPassword())); // mã hóa password
+            User user = new User();
+            user.setUsername(request.getUsername());
+            user.setEmail(request.getEmail());
+            user.setPassword(request.getPassword());
+            user.setFullname(request.getFullname());
+            user.setPhone(request.getPhone());
+            user.setAddress(request.getAddress());
+            user.setRole("USER");
+
             User newUser = userService.register(user);
 
-            UserRequest dto = new UserRequest(
-                    newUser.getId(),
-                    newUser.getUsername(),
-                    newUser.getEmail(),
-                    newUser.getFullname(),
-                    newUser.getPhone(),
-                    newUser.getAddress(),
-                    newUser.getRole()
-            );
-            return ResponseEntity.ok(dto);
+            return ResponseEntity.ok(newUser); // trả về thông tin user
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    //  Đăng nhập 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> loginData) {
         String username = loginData.get("username");
         String password = loginData.get("password");
 
         return userService.login(username, password)
-                .<ResponseEntity<?>>map(user -> {
-                    UserRequest dto = new UserRequest(
-                            user.getId(),
-                            user.getUsername(),
-                            user.getEmail(),
-                            user.getFullname(),
-                            user.getPhone(),
-                            user.getAddress(),
-                            user.getRole()
-                    );
-                    return ResponseEntity.ok(dto);
-                })
+                .<ResponseEntity<?>>map(user -> ResponseEntity.ok(user))
                 .orElse(ResponseEntity.status(401).body("❌ Sai username hoặc password!"));
     }
+
 
     // Lấy thông tin user 
     @GetMapping("/{id}")

@@ -19,43 +19,40 @@ public class UserService {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
-    // Đăng ký 
+ // Đăng ký
     public User register(User user) {
-        if (userRepository.existsByUsername(user.getUsername())) {
+        if(userRepository.existsByUsername(user.getUsername())) {
             throw new RuntimeException("⚠️ Username đã tồn tại!");
         }
-        if (userRepository.existsByEmail(user.getEmail())) {
+        if(userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("⚠️ Email đã tồn tại!");
         }
-        if (userRepository.existsByPhone(user.getPhone())) {
+        if(userRepository.existsByPhone(user.getPhone())) {
             throw new RuntimeException("⚠️ Số điện thoại đã tồn tại!");
         }
 
-        if (user.getFullname() == null || user.getFullname().isBlank()) {
-            throw new RuntimeException("⚠️ Họ tên không được để trống!");
-        }
-        if (user.getPhone() == null || user.getPhone().isBlank()) {
-            throw new RuntimeException("⚠️ Số điện thoại không được để trống!");
-        }
-        if (user.getAddress() == null || user.getAddress().isBlank()) {
-            throw new RuntimeException("⚠️ Địa chỉ không được để trống!");
-        }
-
-        // Mã hóa mật khẩu
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        if (user.getRole() == null || user.getRole().isEmpty()) {
+        if(user.getRole() == null || user.getRole().isEmpty()) {
             user.setRole("USER");
         }
 
         return userRepository.save(user);
     }
 
-    // Đăng nhập 
+
+    // Đăng nhập
     public Optional<User> login(String username, String rawPassword) {
-        return userRepository.findByUsername(username)
-                .filter(user -> passwordEncoder.matches(rawPassword, user.getPassword()));
+        if(username == null || rawPassword == null) return Optional.empty();
+        Optional<User> userOpt = userRepository.findByUsername(username.trim());
+        if(userOpt.isPresent()) {
+            User user = userOpt.get();
+            if(passwordEncoder.matches(rawPassword.trim(), user.getPassword())) {
+                return Optional.of(user);
+            }
+        }
+        return Optional.empty();
     }
+
 
     // Lấy user theo ID 
     public Optional<User> getUserById(Long id) {
